@@ -1,10 +1,13 @@
 <script setup>
+import sessionStore from '@/stores/sessionStore';
 import { downloadImage } from '@/utils'
 import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const dashboard = inject('dashboard')
 const showDeleteDialog = ref(false)
+const session = sessionStore()
+
 const router = useRouter()
 async function handleDelete() {
 	await dashboard.deleteDashboard()
@@ -16,6 +19,7 @@ async function downloadDashboardImage() {
 	const $el = document.querySelector('.dashboard')
 	await downloadImage($el, `${dashboard.doc.title}.png`)
 }
+
 </script>
 
 <template>
@@ -30,12 +34,14 @@ async function downloadDashboardImage() {
 				icon: 'download',
 				onClick: () => downloadDashboardImage(),
 			},
+			session.user.is_user && session.user.system_user !== 'no' ?
 			{
 				label: 'Delete',
 				variant: 'outline',
 				icon: 'trash-2',
 				onClick: () => (showDeleteDialog = true),
-			},
+			}
+			:null
 		]"
 	/>
 

@@ -56,27 +56,49 @@
 			</div>
 
 			<div class="mt-auto flex flex-col items-center gap-2 text-base text-gray-600">
-				<Button variant="ghost" @click="open('https://docs.frappeinsights.com')">
+				<Button v-if="session.user.is_user && session.user.system_user !== 'no'" variant="ghost" @click="open('https://docs.frappeinsights.com')">
 					<BookOpen class="h-4 text-gray-600" />
 				</Button>
 				<Dropdown
 					placement="left"
 					:options="[
+						session.user.is_user && session.user.system_user !== 'no' ? 
 						{
 							label: 'Documentation',
 							icon: 'help-circle',
 							onClick: () => open('https://docs.frappeinsights.com'),
-						},
+						}
+						: null,
+						// {
+						// 	label: 'Documentation',
+						// 	icon: 'help-circle',
+						// 	onClick: () => open('https://docs.frappeinsights.com'),
+						// },
+						session.user.is_user && session.user.system_user !== 'no' ? 
 						{
 							label: 'Join Telegram Group',
 							icon: 'message-circle',
 							onClick: () => open('https://t.me/frappeinsights'),
-						},
+						}
+						: null,
+						// {
+						// 	label: 'Join Telegram Group',
+						// 	icon: 'message-circle',
+						// 	onClick: () => open('https://t.me/frappeinsights'),
+						// },
+							session.user.is_user && session.user.system_user !== 'no' ? 
 						{
 							label: 'Help',
 							icon: 'life-buoy',
 							onClick: () => (showHelpDialog = true),
-						},
+						}
+						: null,
+						// {
+						// 	label: 'Help',
+						// 	icon: 'life-buoy',
+						// 	onClick: () => (showHelpDialog = true),
+						// },
+						
 						session.user.is_admin
 							? {
 									label: 'Switch to Desk',
@@ -185,7 +207,6 @@ const sidebarItems = ref([
 		current: false,
 	},
 ])
-
 watch(
 	() => session.user.is_admin && settings?.enable_permissions,
 	(isAdmin) => {
@@ -212,6 +233,23 @@ watch(
 		}
 	}
 )
+
+watch(
+  () => session.user.is_user && session.user.system_user=="no",
+  (is_user) => {
+    if (is_user) {
+      const itemsToRemove = ['QueryList', 'Data Source','Settings','Notebook']; // Add the names of the items you want to remove
+      itemsToRemove.forEach(itemName => {
+        const itemIndex = sidebarItems.value.findIndex(item => item.name === itemName);
+        if (itemIndex !== -1) {
+          sidebarItems.value.splice(itemIndex, 1);
+        }
+      });
+    }
+  },
+  { immediate: true }
+);
+
 
 const route = useRoute()
 const currentRoute = computed(() => {

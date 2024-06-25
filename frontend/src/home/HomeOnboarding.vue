@@ -3,9 +3,12 @@ import { useStorage } from '@vueuse/core'
 import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ProgressRing from './ProgressRing.vue'
+import sessionStore from '@/stores/sessionStore';
 
 const router = useRouter()
 const showOnboarding = ref(false)
+const session = sessionStore()
+
 const steps = reactive([
 	{
 		title: 'Connect Your Data',
@@ -61,6 +64,7 @@ function completeOnboarding() {
 	onboarding.value = { ...onboarding.value, all_set: true }
 	showOnboarding.value = false
 }
+
 </script>
 
 <template>

@@ -23,8 +23,9 @@ document.title = 'Home | Frappe Insights'
 			<div class="text-lg text-gray-600">{{ today }}</div>
 		</div>
 		<HomeOnboarding></HomeOnboarding>
-		<HomeQuickActions></HomeQuickActions>
-		<HomePinnedItems></HomePinnedItems>
+		<!-- <HomeQuickActions></HomeQuickActions> -->
+		 <HomeQuickActions v-if="session.user.is_user && session.user.system_user !== 'no'"></HomeQuickActions>
+		<HomePinnedItems v-if="session.user.is_user && session.user.system_user !== 'no'"></HomePinnedItems>
 		<HomeRecentRecords></HomeRecentRecords>
 	</div>
 </template>

@@ -3,7 +3,9 @@ import { useMagicKeys, whenever } from '@vueuse/core'
 import { inject } from 'vue'
 import DashboardMenuButton from './DashboardMenuButton.vue'
 import DashboardShareButton from './DashboardShareButton.vue'
+import sessionStore from '@/stores/sessionStore';
 const dashboard = inject('dashboard')
+const session = sessionStore()
 
 const keys = useMagicKeys()
 const cmdE = keys['Meta+E']
@@ -23,10 +25,12 @@ whenever(cmdD, dashboard.discardChanges)
 		<Button v-if="dashboard.editing" variant="outline" @click="dashboard.discardChanges">
 			Cancel
 		</Button>
-		<Button v-if="!dashboard.editing" variant="outline" @click="dashboard.edit"> Edit </Button>
-		<Button v-else variant="solid" @click="dashboard.save" :loading="dashboard.loading">
+		<div v-if="session.user.is_user && session.user.system_user !=='no'">
+			<Button v-if="!dashboard.editing" variant="outline" @click="dashboard.edit"> Edit </Button>
+		<Button v-else  variant="solid" @click="dashboard.save" :loading="dashboard.loading">
 			Save
 		</Button>
+		</div>
 		<DashboardMenuButton />
 	</div>
 </template>

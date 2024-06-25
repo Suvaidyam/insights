@@ -1,10 +1,10 @@
 <template>
 	<header class="sticky top-0 z-10 flex items-center justify-between bg-white px-5 py-2.5">
 		<PageBreadcrumbs class="h-7" :items="[{ label: 'Dashboards' }]" />
-		<div class="space-x-2.5">
+		<div class="space-x-2.5" v-if="session.user.is_user && session.user.system_user !== 'no'">
 			<Button label="New Dashboard" variant="solid" @click="showDialog = true">
 				<template #prefix>
-					<Plus class="h-4 w-4" />
+					<Plus class="h-4 w-4"/>
 				</template>
 			</Button>
 		</div>
@@ -70,7 +70,8 @@ import { Plus } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DashboardsGroup from './DashboardListGroup.vue'
-
+import sessionStore from '@/stores/sessionStore'
+const session = sessionStore()
 const settings = settingsStore().settings
 
 const dashboards = useDashboards()
