@@ -69,7 +69,7 @@ function completeOnboarding() {
 
 <template>
 	<div v-if="!onboarding.all_set && currentStep < steps.length">
-		<div class="flex items-center justify-between rounded bg-gray-50 px-4 py-3">
+		<div v-if="session.user.is_user && session.user.system_user !== 'no'" class="flex items-center justify-between rounded bg-gray-50 px-4 py-3">
 			<div class="flex items-center space-x-2">
 				<ProgressRing
 					class="text-gray-900"
